@@ -1,5 +1,5 @@
 // Users database
-export const UserDB = [
+const UserDB = [
   {
     id: 1,
     name: 'Alex',
@@ -22,4 +22,8 @@ export const UserDB = [
 
 export function hasAccess(userId: number) {
   return UserDB.find(user => user.id === userId)?.hasAccess;
+}
+
+export function isValidUser(username: string, password: string) {
+  return UserDB.find(user => user.name === username && user.password === password);
 }

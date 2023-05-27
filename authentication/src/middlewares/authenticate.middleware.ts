@@ -1,17 +1,27 @@
-import { UserDB } from '../users.repository';
+import { env } from "../secrets";
+import { isValidUser } from "../users.repository";
+import jwt from 'jsonwebtoken';
 
 // Middleware to handle authentication
 export function authenticateTokenMiddleware(req: any, res: any, next: Function) {
   const { username, password } = req.body;
 
   // We try to find the user in our DB
-  const user = UserDB.find(user => user.name === username && user.password === password);
+  const user = isValidUser(username, password);
 
   if (!user)
     return res.sendStatus(403); // Forbidden
 
-  // Attach its id to generate a token
-  req.body.id = user.id;
+  const token = generateToken(username, user.id);
+  req.body.token = token;
 
   next();
+}
+
+function generateToken(username: string, id: number) {
+  return jwt.sign(
+    { username, id },
+    env.jwtSecret,
+    { expiresIn: env.expiresIn }
+  );
 }

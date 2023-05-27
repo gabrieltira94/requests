@@ -1,4 +1,5 @@
 // dummy replica of .env
 export const env = {
-  jwtSecret: 'wooow'
+  jwtSecret: 'wooow',
+  expiresIn: 60
 };

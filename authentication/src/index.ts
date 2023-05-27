@@ -1,7 +1,5 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
-import { env } from './secrets';
 import { authenticateTokenMiddleware } from './middlewares/authenticate.middleware';
 import { authorizeTokenMiddleware } from './middlewares/authorize.middleware';
 
@@ -19,8 +17,7 @@ app.get('/protected', authorizeTokenMiddleware, (req: any, res: any) => {
 
 // API endpoint for generating a token
 app.post('/login', authenticateTokenMiddleware, (req: any, res: any) => {
-  const { username, id } = req.body;
-  const token = jwt.sign({ username, id }, env.jwtSecret, { expiresIn: 60 });
+  const { token } = req.body;
 
   res.json({ token });
 });
